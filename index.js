@@ -37,14 +37,11 @@ module.exports = {
       upload(file) {
         return new Promise((resolve, reject) => {
           const path = getUploadPath(file);
-          const metaData = {
-            'Content-Type': mime.lookup(file.ext) || 'application/octet-stream',
-          }
           MINIO.putObject(
             bucket,
             path,
             file.stream || Buffer.from(file.buffer, 'binary'),
-            metaData,
+            file.sizeInBytes,
             (err, _etag) => {
               if (err) {
                 return reject(err);
